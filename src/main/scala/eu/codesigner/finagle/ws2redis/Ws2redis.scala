@@ -32,7 +32,8 @@ object Ws2redis {
   def main(args: Array[String]) {
     val conf = ConfigFactory.parseFile(new File("ws2redis.conf"))
     val rb = new RedisBroker(conf)
-    // #TODO? Not sure if we should support JSON Commands or maybe directly implement WAMP as of http://wamp.ws/spec/
+    
+    // #TODO? Probably we should support JSON Commands or maybe implement WAMP as of http://wamp.ws/spec/
 
     val server = HttpWebSocket.serve(conf.getString("listenAddress"), new Service[WebSocket, WebSocket] {
 
@@ -47,8 +48,10 @@ object Ws2redis {
           resp flatMap {
             s =>
               {
+                // #TODO replies may contain binary data, should probably return bytes or JSON with base64 encoded strings?
                 val str = s.toChannelBuffer.toString("UTF-8")
-                // Enqueue
+                
+                // Enqueue response
                 outgoing ! str
               }
           }

@@ -31,8 +31,8 @@ import com.typesafe.config.Config
 
 class RedisBroker(conf: Config) {
 
-  // Client connection towards Redis server, no lazy init!
-  var client: Service[Command, Reply] = ClientBuilder()
+  // Client connection towards Redis server
+  val client: Service[Command, Reply] = ClientBuilder()
     .codec(Redis())
     .hosts(conf.getString("redisAddress"))
     .hostConnectionLimit(1)
@@ -44,6 +44,7 @@ class RedisBroker(conf: Config) {
       val rcmd = Commands.doMatch(cmd, args.getOrElse(null))
       client(rcmd)
     } catch {
+      // Unrecognized commands come back as exceptions. Manually put the error message inside an ErrorReply
       case e: ClientError => Future(ErrorReply(e.message))
     }
   }
@@ -66,11 +67,10 @@ object RedisBroker {
     // Arity > 1 
     val splitted = s.split(' ')
     val cmd = splitted(0)
-
     if (splitted.length == 1) {
       return (cmd, None)
     }
-
+    // Arguments = the splitted string without the first token (the command)
     return (cmd, Some(splitted.takeRight(splitted.length - 1).map(_.map(_.toByte).toArray[Byte]).toList))
   }
 
