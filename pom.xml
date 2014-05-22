@@ -1,0 +1,66 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>eu.codesigner.finagle</groupId>
+	<artifactId>ws2redis</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>ws2redis</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>typesafe</id>
+			<name>typesafe-releases</name>
+			<url>http://repo.typesafe.com/typesafe/maven-releases</url>
+		</repository>
+
+		<repository>
+			<id>com.github.sprsquish</id>
+			<url>https://raw.github.com/sprsquish/mvn-repo/master/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+	<dependencies>
+
+		<dependency>
+			<groupId>com.github.sprsquish</groupId>
+			<artifactId>finagle-websockets_2.10</artifactId>
+			<version>6.14.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.twitter</groupId>
+			<artifactId>finagle-redis_2.10</artifactId>
+			<version>6.15.0</version>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>com.typesafe.play</groupId> -->
+		<!-- <artifactId>play-json_2.10</artifactId> -->
+		<!-- <version>2.0.6</version> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>com.typesafe</groupId>
+			<artifactId>config</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scalatest</groupId>
+			<artifactId>scalatest_2.10</artifactId>
+			<version>2.1.5</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
