@@ -8,6 +8,7 @@ import com.twitter.concurrent.Broker
 import com.twitter.util.{ Await, Future }
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
+import java.io.File
 
 /**
  * Websocket to Redis proxy written in Twitter's Finagle.
@@ -29,7 +30,7 @@ import com.typesafe.config.ConfigFactory
 
 object Ws2redis {
   def main(args: Array[String]) {
-    val conf = ConfigFactory.load()
+    val conf = ConfigFactory.parseFile(new File("ws2redis.conf"))
     val rb = new RedisBroker(conf)
     // #TODO? Not sure if we should support JSON Commands or maybe directly implement WAMP as of http://wamp.ws/spec/
 
@@ -47,7 +48,6 @@ object Ws2redis {
             s =>
               {
                 val str = s.toChannelBuffer.toString("UTF-8")
-                println(str)
                 // Enqueue
                 outgoing ! str
               }
