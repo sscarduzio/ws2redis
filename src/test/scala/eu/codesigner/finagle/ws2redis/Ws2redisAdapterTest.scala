@@ -1,5 +1,7 @@
 package eu.codesigner.finagle.ws2redis
-import org.scalatest._
+
+import org.scalatest.FlatSpec
+import org.scalatest.Matchers
 
 class Ws2redisAdapterTest extends FlatSpec with Matchers {
 

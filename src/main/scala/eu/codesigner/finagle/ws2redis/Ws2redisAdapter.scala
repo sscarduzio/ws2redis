@@ -1,16 +1,17 @@
 package eu.codesigner.finagle.ws2redis
 
-import com.twitter.finagle.Service
-import com.twitter.finagle.redis.protocol.Commands
-import com.twitter.finagle.redis.protocol.Command
+import scala.util.Failure
+import scala.util.Success
+import scala.util.Try
+import scala.util.control.NoStackTrace
+
 import com.twitter.finagle.Filter
+import com.twitter.finagle.Service
+import com.twitter.finagle.redis.protocol.Command
+import com.twitter.finagle.redis.protocol.Commands
+import com.twitter.finagle.redis.protocol.ErrorReply
 import com.twitter.finagle.redis.protocol.Reply
 import com.twitter.util.Future
-import scala.util.Try
-import scala.util.Success
-import scala.util.Failure
-import com.twitter.finagle.redis.protocol.ErrorReply
-import scala.util.control.NoStackTrace
 
 /**
  * Websocket to Redis proxy written in Twitter's Finagle.

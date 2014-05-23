@@ -1,15 +1,10 @@
 package eu.codesigner.finagle.ws2redis
 
-import com.twitter.finagle.HttpWebSocket
-import com.twitter.finagle.Service
-import com.twitter.finagle.websocket.WebSocket
-import com.twitter.util.Future
-import com.twitter.concurrent.Broker
-import com.twitter.util.{ Await, Future }
-import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
 import java.io.File
-import com.twitter.finagle.Filter
+
+import com.twitter.finagle.HttpWebSocket
+import com.twitter.util.Await
+import com.typesafe.config.ConfigFactory
 
 /**
  * Websocket to Redis proxy written in Twitter's Finagle.

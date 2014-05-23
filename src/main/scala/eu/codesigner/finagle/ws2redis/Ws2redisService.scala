@@ -1,22 +1,14 @@
 package eu.codesigner.finagle.ws2redis
 
-import com.twitter.finagle.HttpWebSocket
+import com.twitter.concurrent.Broker
 import com.twitter.finagle.Service
+import com.twitter.finagle.builder.ClientBuilder
+import com.twitter.finagle.redis.Redis
+import com.twitter.finagle.redis.protocol.Command
+import com.twitter.finagle.redis.protocol.Reply
 import com.twitter.finagle.websocket.WebSocket
 import com.twitter.util.Future
-import com.twitter.concurrent.Broker
-import com.twitter.util.{ Await, Future }
 import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
-import java.io.File
-import com.twitter.finagle.redis.protocol.Commands
-import com.twitter.finagle.redis.protocol.ErrorReply
-import com.twitter.finagle.redis.ClientError
-import com.twitter.finagle.redis.protocol.Reply
-import com.twitter.finagle.builder.ClientBuilder
-import com.twitter.finagle.redis.protocol.Command
-import com.twitter.finagle.redis.Redis
-import com.sun.org.apache.xml.internal.serializer.ToSAXHandler
 
 /**
  * Websocket to Redis proxy written in Twitter's Finagle.
