@@ -61,15 +61,10 @@ object Ws2redisAdapter {
     // Arity > 1 
     val firstSpace = s.indexOf(' ')
     
-    if (firstSpace == -1) 
-      return (s, null)
-    
     val cmd = s.substring(0, firstSpace)
     val args = s.substring(firstSpace + 1, s.size).split(' ')
     
-    if (args.size == 0)
-      return (cmd, null)
-    
-    return (cmd, args.map(_.map(_.toByte).toArray[Byte]).toList)
+    // Args need to be transformed from Strings to Array[Byte]
+    return (cmd, args.map(_.getBytes()).toList)
   }
 }
