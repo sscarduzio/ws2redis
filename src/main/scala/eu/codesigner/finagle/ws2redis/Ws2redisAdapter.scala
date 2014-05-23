@@ -45,7 +45,7 @@ class Ws2redisAdapter extends Filter[String, String, Command, Reply] {
 }
 
 object Ws2redisAdapter {
-  
+
   // #TODO? Probably we should support JSON Commands or maybe implement WAMP as of http://wamp.ws/spec/
   def adaptRedisCommand(_s: String): (String, List[Array[Byte]]) = {
     val s = _s.trim
@@ -59,13 +59,17 @@ object Ws2redisAdapter {
     }
 
     // Arity > 1 
-    val splitted = s.split(' ')
-    val cmd = splitted(0)
-    if (splitted.length == 1) {
+    val firstSpace = s.indexOf(' ')
+    
+    if (firstSpace == -1) 
+      return (s, null)
+    
+    val cmd = s.substring(0, firstSpace)
+    val args = s.substring(firstSpace + 1, s.size).split(' ')
+    
+    if (args.size == 0)
       return (cmd, null)
-    }
-    // Arguments = the splitted string without the first token (the command)
-    return (cmd, splitted.takeRight(splitted.length - 1).map(_.map(_.toByte).toArray[Byte]).toList)
+    
+    return (cmd, args.map(_.map(_.toByte).toArray[Byte]).toList)
   }
-
 }
