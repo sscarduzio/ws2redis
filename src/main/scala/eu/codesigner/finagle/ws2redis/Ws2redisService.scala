@@ -9,7 +9,14 @@ import com.twitter.util.{ Await, Future }
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import java.io.File
-import com.twitter.finagle.Filter
+import com.twitter.finagle.redis.protocol.Commands
+import com.twitter.finagle.redis.protocol.ErrorReply
+import com.twitter.finagle.redis.ClientError
+import com.twitter.finagle.redis.protocol.Reply
+import com.twitter.finagle.builder.ClientBuilder
+import com.twitter.finagle.redis.protocol.Command
+import com.twitter.finagle.redis.Redis
+import com.sun.org.apache.xml.internal.serializer.ToSAXHandler
 
 /**
  * Websocket to Redis proxy written in Twitter's Finagle.
@@ -29,13 +36,30 @@ import com.twitter.finagle.Filter
  * limitations under the License.
  */
 
-object Ws2redis {
-  
-  def main(args: Array[String]) {
-    val conf = ConfigFactory.parseFile(new File("ws2redis.conf"))
+class Ws2redisService(conf: Config) extends Service[WebSocket, WebSocket] {
 
-    val server = HttpWebSocket.serve(conf.getString("listenAddress"), new Ws2redisService(conf))
-    Await.ready(server)
+  // Client connection towards Redis server
+  val client: Service[Command, Reply] = ClientBuilder()
+    .codec(Redis())
+    .hosts(conf.getString("redisAddress"))
+    .hostConnectionLimit(1)
+    .build()
+
+  val filter = new Ws2redisAdapter
+  val filteredClient = filter andThen client
+
+  def apply(req: WebSocket): Future[WebSocket] = {
+    val outgoing = new Broker[String]
+    val socket = req.copy(messages = outgoing.recv)
+    val msgs = req.messages
+
+    req.messages foreach (receivedString => {
+      val resp = filteredClient(receivedString)
+      resp flatMap {
+        s => outgoing ! s
+      }
+    })
+    Future.value(socket)
   }
 
 }
